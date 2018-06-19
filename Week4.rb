@@ -16,8 +16,10 @@ def initialize
 
    File.open(file_name).each do |line|
 
-    ip=ip_regex.match(line)[0]
-    url=url_regex.match(line)[0]
+
+
+    ip=ip_regex.match(line).to_s
+    url=url_regex.match(line).to_s
 
     if url == "secret.html"
       secret=1
@@ -27,21 +29,17 @@ def initialize
         error =1
       end
 
+   if url.length>2
+      count_hits(ip, url, secret, error)
+   end
 
- count_hits(ip, url, secret, error)
+
 end
 
  print_hits
  end
- private
- # Count the total and secret queries for a given ip
-  #
-  # Args:
-  # - ip: string -- IP address responsible for the logged entry
-  # - url: string -- URL queried for the logged entry
-  # - secret: bool -- Whether or not the url queried was secret.html
-  # - error: bool -- Whether or not the log entry contained a 404 error
-  #
+private
+
   def count_hits(ip, url, secret, error)
  @total_hits_by_ip[ip]+=1
    @total_hits_per_url[url]+=1
